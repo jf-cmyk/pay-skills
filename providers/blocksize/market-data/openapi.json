@@ -13,7 +13,7 @@
   "paths": {
     "/v1/vwap/{pair}": {
       "get": {
-        "summary": "Get Vwap",
+        "summary": "Fetch a volume-weighted price for one crypto pair",
         "description": "Get real-time VWAP for a crypto pair. Cost: $0.002–$0.004 USDC.",
         "operationId": "get_vwap_v1_vwap__pair__get",
         "parameters": [
@@ -81,7 +81,7 @@
     },
     "/v1/bidask/{pair}": {
       "get": {
-        "summary": "Get Bidask",
+        "summary": "Fetch bid and ask prices for one supported symbol",
         "description": "Get bid/ask snapshot for a shared symbol. Cost: $0.002–$0.008 USDC.",
         "operationId": "get_bidask_v1_bidask__pair__get",
         "parameters": [
@@ -149,7 +149,7 @@
     },
     "/v1/state/{pair}": {
       "get": {
-        "summary": "Get State Price Endpoint",
+        "summary": "Fetch a pool-derived AMM state price for one symbol",
         "description": "Get pool-derived state price for a covered crypto/protocol pair.",
         "operationId": "get_state_price_endpoint_v1_state__pair__get",
         "parameters": [
@@ -217,7 +217,7 @@
     },
     "/v1/vwap30m/{pair}": {
       "get": {
-        "summary": "Get Vwap 30M Endpoint",
+        "summary": "Fetch the latest completed 30-minute closing price",
         "description": "Get latest completed 30-minute close via Blocksize closingprice_list.",
         "operationId": "get_vwap_30m_endpoint_v1_vwap30m__pair__get",
         "parameters": [
@@ -297,7 +297,7 @@
     },
     "/v1/vwap24h/{pair}": {
       "get": {
-        "summary": "Get Vwap 24H Endpoint",
+        "summary": "Fetch the cached fixed 24-hour volume-weighted price",
         "description": "Get true 24-hour fixed VWAP from the websocket-backed cache.",
         "operationId": "get_vwap_24h_endpoint_v1_vwap24h__pair__get",
         "parameters": [
@@ -365,7 +365,7 @@
     },
     "/v1/fx/{pair}": {
       "get": {
-        "summary": "Get Fx",
+        "summary": "Fetch a foreign-exchange rate for one currency pair",
         "description": "Get FX rate. Cost: $0.005 USDC.",
         "operationId": "get_fx_v1_fx__pair__get",
         "parameters": [
@@ -432,7 +432,7 @@
     },
     "/v1/metal/{ticker}": {
       "get": {
-        "summary": "Get Metal",
+        "summary": "Fetch a precious-metal spot price for one ticker",
         "description": "Get metal spot price. Cost: $0.005 USDC.",
         "operationId": "get_metal_v1_metal__ticker__get",
         "parameters": [
@@ -499,7 +499,7 @@
     },
     "/v1/batch": {
       "get": {
-        "summary": "Batch Request",
+        "summary": "Fetch a bounded batch of requested market observations",
         "description": "Execute a batch of data queries.\nPass a comma separated list of svc:pair in the `reqs` query parameter.\nExample: /v1/batch?reqs=vwap:BTCUSD,bidask:ETHUSD,fx:EURUSD",
         "operationId": "batch_request_v1_batch_get",
         "parameters": [
@@ -567,7 +567,7 @@
     },
     "/v1/briefs/market": {
       "post": {
-        "summary": "Agent Market Brief",
+        "summary": "Create a market brief for a bounded symbol list",
         "description": "Create a decision-ready market brief. Cost: 10 credits or $0.25 USDC.",
         "operationId": "agent_market_brief_v1_briefs_market_post",
         "requestBody": {
@@ -633,7 +633,7 @@
     },
     "/v1/checks/pre-trade": {
       "post": {
-        "summary": "Pre Trade Sanity Check",
+        "summary": "Check market spread and freshness before a trade",
         "description": "Run a read-only pre-trade sanity check. Cost: 5 credits or $0.10 USDC.",
         "operationId": "pre_trade_sanity_check_v1_checks_pre_trade_post",
         "requestBody": {
@@ -699,7 +699,7 @@
     },
     "/v1/receipts/price": {
       "post": {
-        "summary": "Audit Grade Price Receipt",
+        "summary": "Create an unsigned provenance receipt for a price",
         "description": "Create an audit-grade receipt for one price lookup. Cost: 10 credits or $0.25 USDC.",
         "operationId": "audit_grade_price_receipt_v1_receipts_price_post",
         "requestBody": {
@@ -764,7 +764,7 @@
     },
     "/v1/snapshots/macro": {
       "post": {
-        "summary": "Multi Asset Macro Snapshot",
+        "summary": "Create a bounded multi-asset market snapshot",
         "description": "Create a bounded multi-asset macro snapshot. Cost: 25 credits or $1.00 USDC.",
         "operationId": "multi_asset_macro_snapshot_v1_snapshots_macro_post",
         "requestBody": {
@@ -830,7 +830,7 @@
     },
     "/v1/monitors/evaluate": {
       "post": {
-        "summary": "Spend Controlled Market Monitor",
+        "summary": "Evaluate market monitor rules once without scheduling",
         "description": "Evaluate a bounded market monitor immediately. Cost: 10 credits or $0.25 USDC.",
         "operationId": "spend_controlled_market_monitor_v1_monitors_evaluate_post",
         "requestBody": {
@@ -896,7 +896,7 @@
     },
     "/v1/indicators/token-quality": {
       "post": {
-        "summary": "Token Market Quality Indicator",
+        "summary": "Evaluate token market quality using supported feeds",
         "description": "Score one token using live price, bid/ask, state, and VWAP-window feeds.",
         "operationId": "token_market_quality_indicator_v1_indicators_token_quality_post",
         "requestBody": {
@@ -960,7 +960,7 @@
     },
     "/v1/indicators/state-divergence": {
       "post": {
-        "summary": "State Divergence Indicator",
+        "summary": "Compare market prices with a covered AMM state price",
         "description": "Compare Blocksize market prices with state/reference prices.",
         "operationId": "state_divergence_indicator_v1_indicators_state_divergence_post",
         "requestBody": {
@@ -1024,7 +1024,7 @@
     },
     "/v1/signals/solana-token-brief": {
       "post": {
-        "summary": "Solana Token Brief",
+        "summary": "Create a market brief for supported Solana symbols",
         "description": "Build a Solana-oriented token signal brief for supported price symbols.",
         "operationId": "solana_token_brief_v1_signals_solana_token_brief_post",
         "requestBody": {
@@ -1090,7 +1090,7 @@
     },
     "/v1/signals/trader-alpha-pack": {
       "post": {
-        "summary": "Trader Alpha Pack",
+        "summary": "Create a bounded market indicator and signal bundle",
         "description": "Bundle token quality indicators and macro context into a trader signal pack.",
         "operationId": "trader_alpha_pack_v1_signals_trader_alpha_pack_post",
         "requestBody": {
@@ -1156,7 +1156,7 @@
     },
     "/v1/search": {
       "get": {
-        "summary": "Search Pairs",
+        "summary": "Search supported market-data instruments for free",
         "description": "Search instruments. FREE.",
         "operationId": "search_pairs_v1_search_get",
         "parameters": [
@@ -1244,7 +1244,7 @@
     },
     "/v1/instruments/{service}": {
       "get": {
-        "summary": "List Instruments",
+        "summary": "List supported instruments for one data service",
         "description": "List instruments for a service. FREE.",
         "operationId": "list_instruments_v1_instruments__service__get",
         "parameters": [
@@ -1315,7 +1315,7 @@
     },
     "/v1/products": {
       "get": {
-        "summary": "Get Products",
+        "summary": "List market-data products and access options",
         "description": "Serve raw data and premium workflow product catalog. FREE.",
         "operationId": "get_products_v1_products_get",
         "responses": {
@@ -1336,7 +1336,7 @@
     },
     "/v1/capabilities/check": {
       "post": {
-        "summary": "Check Data Capabilities",
+        "summary": "Check supported feed coverage before buying data",
         "description": "Check whether the current key has enough feed coverage for a product.\n\nThis is a free readiness check. It uses instrument catalogs and known method\navailability, not paid price snapshots.",
         "operationId": "check_data_capabilities_v1_capabilities_check_post",
         "requestBody": {
@@ -1385,7 +1385,7 @@
     },
     "/v1/coverage": {
       "get": {
-        "summary": "Unified Coverage",
+        "summary": "Inspect market-data coverage without buying prices",
         "description": "Return one conservative coverage map for humans and agents. FREE.",
         "operationId": "unified_coverage_v1_coverage_get",
         "responses": {
@@ -1406,7 +1406,7 @@
     },
     "/v1/cache/status": {
       "get": {
-        "summary": "Get Cache Status",
+        "summary": "Inspect cached observation freshness and availability",
         "description": "Report stream-cache readiness for websocket-backed feeds. FREE.",
         "operationId": "get_cache_status_v1_cache_status_get",
         "responses": {
