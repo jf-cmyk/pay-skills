@@ -1,9 +1,9 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.1.0",
   "info": {
     "title": "Blocksize Market Data",
-    "version": "v1",
-    "description": "Filtered Pay.sh-facing OpenAPI spec for Blocksize x402-paid market data endpoints."
+    "version": "0.6.16",
+    "description": "Filtered snapshot of the production Blocksize API: free discovery/readiness and x402-paid multi-asset observations and workflows. Catalog presence does not guarantee live readiness."
   },
   "servers": [
     {
@@ -11,130 +11,615 @@
     }
   ],
   "paths": {
-    "/v1/vwap/BTC-USD": {
+    "/v1/vwap/{pair}": {
       "get": {
-        "summary": "Fetch live crypto VWAP market data",
-        "description": "Return real-time crypto VWAP market data. Replace BTC-USD with another supported pair after using discovery.",
-        "operationId": "getCryptoVwap",
+        "summary": "Get Vwap",
+        "description": "Get real-time VWAP for a crypto pair. Cost: $0.002–$0.004 USDC.",
+        "operationId": "get_vwap_v1_vwap__pair__get",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pair",
+              "example": "BTCUSD"
+            },
+            "example": "BTCUSD"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Structured VWAP response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Vwap V1 Vwap  Pair  Get"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
+          "price": {
+            "mode": "dynamic",
+            "currency": "USD",
+            "min": "0.002",
+            "max": "0.004"
+          },
           "protocols": [
-            "x402"
-          ],
-          "pricingMode": "dynamic",
-          "price": "$0.002-$0.004"
+            {
+              "x402": {}
+            }
+          ]
         }
       }
     },
-    "/v1/bidask/BTC-USD": {
+    "/v1/bidask/{pair}": {
       "get": {
-        "summary": "Fetch live crypto bid-ask market data",
-        "description": "Return a real-time bid/ask snapshot. Replace BTC-USD with another supported symbol after using discovery.",
-        "operationId": "getCryptoBidAsk",
+        "summary": "Get Bidask",
+        "description": "Get bid/ask snapshot for a shared symbol. Cost: $0.002–$0.008 USDC.",
+        "operationId": "get_bidask_v1_bidask__pair__get",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pair",
+              "example": "BTCUSD"
+            },
+            "example": "BTCUSD"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Structured bid/ask response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Bidask V1 Bidask  Pair  Get"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
+          "price": {
+            "mode": "dynamic",
+            "currency": "USD",
+            "min": "0.002",
+            "max": "0.008"
+          },
           "protocols": [
-            "x402"
-          ],
-          "pricingMode": "dynamic",
-          "price": "$0.002-$0.004"
+            {
+              "x402": {}
+            }
+          ]
         }
       }
     },
-    "/v1/state/MSOLUSD": {
+    "/v1/state/{pair}": {
       "get": {
-        "summary": "Fetch live AMM state price data",
-        "description": "Return a pool-derived AMM state price for a state-covered symbol such as MSOLUSD.",
-        "operationId": "getStatePrice",
+        "summary": "Get State Price Endpoint",
+        "description": "Get pool-derived state price for a covered crypto/protocol pair.",
+        "operationId": "get_state_price_endpoint_v1_state__pair__get",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pair",
+              "example": "MSOLUSD"
+            },
+            "example": "MSOLUSD"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Structured state price response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get State Price Endpoint V1 State  Pair  Get"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
+          "price": {
+            "mode": "dynamic",
+            "currency": "USD",
+            "min": "0.002",
+            "max": "0.004"
+          },
           "protocols": [
-            "x402"
-          ],
-          "pricingMode": "dynamic",
-          "price": "$0.002-$0.004",
-          "starterCredits": 1
+            {
+              "x402": {}
+            }
+          ]
         }
       }
     },
-    "/v1/vwap30m/SOLUSD": {
+    "/v1/vwap30m/{pair}": {
       "get": {
-        "summary": "Get latest 30-minute close",
-        "description": "Return the latest completed 30-minute close backed by Blocksize closingprice_list.",
-        "operationId": "getVwap30m",
+        "summary": "Get Vwap 30M Endpoint",
+        "description": "Get latest completed 30-minute close via Blocksize closingprice_list.",
+        "operationId": "get_vwap_30m_endpoint_v1_vwap30m__pair__get",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pair",
+              "example": "SOLUSD"
+            },
+            "example": "SOLUSD"
+          },
+          {
+            "name": "include_trades",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include closingprice_trades evidence",
+              "default": false,
+              "title": "Include Trades"
+            },
+            "description": "Include closingprice_trades evidence"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Structured 30-minute close response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Vwap 30M Endpoint V1 Vwap30M  Pair  Get"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
+          "price": {
+            "mode": "dynamic",
+            "currency": "USD",
+            "min": "0.002",
+            "max": "0.004"
+          },
           "protocols": [
-            "x402"
-          ],
-          "pricingMode": "dynamic",
-          "price": "$0.002-$0.004",
-          "starterCredits": 1
+            {
+              "x402": {}
+            }
+          ]
         }
       }
     },
-    "/v1/vwap24h/BTCUSD": {
+    "/v1/vwap24h/{pair}": {
       "get": {
-        "summary": "Fetch latest 24-hour fixed VWAP data",
-        "description": "Return true 24h fixed VWAP from the Blocksize fixedvwap_subscribe websocket cache.",
-        "operationId": "getVwap24h",
+        "summary": "Get Vwap 24H Endpoint",
+        "description": "Get true 24-hour fixed VWAP from the websocket-backed cache.",
+        "operationId": "get_vwap_24h_endpoint_v1_vwap24h__pair__get",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pair",
+              "example": "BTCUSD"
+            },
+            "example": "BTCUSD"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Structured 24h fixed VWAP response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Vwap 24H Endpoint V1 Vwap24H  Pair  Get"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
+          "price": {
+            "mode": "dynamic",
+            "currency": "USD",
+            "min": "0.002",
+            "max": "0.004"
+          },
           "protocols": [
-            "x402"
-          ],
-          "pricingMode": "dynamic",
-          "price": "$0.002-$0.004",
-          "starterCredits": 1
+            {
+              "x402": {}
+            }
+          ]
         }
       }
     },
-    "/v1/fx/EURUSD": {
+    "/v1/fx/{pair}": {
       "get": {
-        "summary": "Fetch live FX exchange rate data",
-        "description": "Return real-time FX market data. Replace EURUSD with another supported FX pair after using discovery.",
-        "operationId": "getFxRate",
+        "summary": "Get Fx",
+        "description": "Get FX rate. Cost: $0.005 USDC.",
+        "operationId": "get_fx_v1_fx__pair__get",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pair",
+              "example": "EURUSD"
+            },
+            "example": "EURUSD"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Structured FX rate response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Fx V1 Fx  Pair  Get"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "price": {
+            "mode": "fixed",
+            "currency": "USD",
+            "amount": "0.005"
+          },
+          "protocols": [
+            {
+              "x402": {}
+            }
+          ]
+        }
+      }
+    },
+    "/v1/metal/{ticker}": {
+      "get": {
+        "summary": "Get Metal",
+        "description": "Get metal spot price. Cost: $0.005 USDC.",
+        "operationId": "get_metal_v1_metal__ticker__get",
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ticker",
+              "example": "XAUUSD"
+            },
+            "example": "XAUUSD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Metal V1 Metal  Ticker  Get"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "price": {
+            "mode": "fixed",
+            "currency": "USD",
+            "amount": "0.005"
+          },
+          "protocols": [
+            {
+              "x402": {}
+            }
+          ]
+        }
+      }
+    },
+    "/v1/batch": {
+      "get": {
+        "summary": "Batch Request",
+        "description": "Execute a batch of data queries.\nPass a comma separated list of svc:pair in the `reqs` query parameter.\nExample: /v1/batch?reqs=vwap:BTCUSD,bidask:ETHUSD,fx:EURUSD",
+        "operationId": "batch_request_v1_batch_get",
+        "parameters": [
+          {
+            "name": "reqs",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reqs",
+              "example": "vwap:BTCUSD,bidask:ETHUSD"
+            },
+            "example": "vwap:BTCUSD,bidask:ETHUSD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Batch Request V1 Batch Get"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "price": {
+            "mode": "dynamic",
+            "currency": "USD",
+            "min": "0.002",
+            "max": "0.400"
+          },
+          "protocols": [
+            {
+              "x402": {}
+            }
+          ]
+        }
+      }
+    },
+    "/v1/briefs/market": {
+      "post": {
+        "summary": "Agent Market Brief",
+        "description": "Create a decision-ready market brief. Cost: 10 credits or $0.25 USDC.",
+        "operationId": "agent_market_brief_v1_briefs_market_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbols": [
+                  "BTCUSD"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Agent Market Brief V1 Briefs Market Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
@@ -142,21 +627,65 @@
             "x402"
           ],
           "pricingMode": "fixed",
-          "price": "$0.005"
+          "price": "$0.25"
         }
       }
     },
-        "/v1/metal/XAUUSD": {
-            "get": {
-                "summary": "Fetch live precious metals price data",
-                "description": "Return real-time metals market data. Replace XAUUSD with another supported metals ticker after using discovery.",
-                "operationId": "getMetalPrice",
+    "/v1/checks/pre-trade": {
+      "post": {
+        "summary": "Pre Trade Sanity Check",
+        "description": "Run a read-only pre-trade sanity check. Cost: 5 credits or $0.10 USDC.",
+        "operationId": "pre_trade_sanity_check_v1_checks_pre_trade_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbol": "BTCUSD",
+                "side": "buy",
+                "notional_usd": 1
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "Structured metals price response."
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Pre Trade Sanity Check V1 Checks Pre Trade Post"
+                }
+              }
+            }
           },
           "402": {
-            "description": "Payment Required."
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         },
         "x-payment-info": {
@@ -164,279 +693,794 @@
             "x402"
           ],
           "pricingMode": "fixed",
-                    "price": "$0.005"
-                }
-            }
-        },
-        "/v1/briefs/market": {
-            "post": {
-                "summary": "Create Agent Market Brief",
-                "description": "Return a decision-ready market brief with live data, quality flags, and provenance.",
-                "operationId": "createAgentMarketBrief",
-                "responses": {
-                    "200": {
-                        "description": "Agent Market Brief response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$0.25",
-                    "starterCredits": 10
-                }
-            }
-        },
-        "/v1/checks/pre-trade": {
-            "post": {
-                "summary": "Run Pre-Trade Sanity Check",
-                "description": "Return a read-only spread, freshness, and reference-price guardrail check before execution elsewhere.",
-                "operationId": "runPreTradeSanityCheck",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["symbol"],
-                                "properties": {
-                                    "symbol": {"type": "string", "example": "BTC-USD"},
-                                    "side": {"type": "string", "example": "buy"},
-                                    "notional_usd": {"type": "number", "example": 1000}
-                                }
-                            },
-                            "example": {"symbol": "BTC-USD", "side": "buy", "notional_usd": 1000}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Pre-trade sanity check response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$0.10",
-                    "starterCredits": 5
-                }
-            }
-        },
-        "/v1/receipts/price": {
-            "post": {
-                "summary": "Create Audit-Grade Price Receipt",
-                "description": "Return a price lookup plus receipt id, request hash, response hash, and source provenance.",
-                "operationId": "createPriceReceipt",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["symbol"],
-                                "properties": {
-                                    "symbol": {"type": "string", "example": "BTC-USD"},
-                                    "service": {"type": "string", "example": "vwap"}
-                                }
-                            },
-                            "example": {"symbol": "BTC-USD", "service": "vwap"}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Audit-grade price receipt response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$0.25",
-                    "starterCredits": 10
-                }
-            }
-        },
-        "/v1/snapshots/macro": {
-            "post": {
-                "summary": "Create Multi-Asset Macro Snapshot",
-                "description": "Return a bounded multi-asset snapshot across crypto, FX, and metals with a market-regime summary.",
-                "operationId": "createMacroSnapshot",
-                "responses": {
-                    "200": {
-                        "description": "Multi-asset macro snapshot response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$1.00",
-                    "starterCredits": 25
-                }
-            }
-        },
-        "/v1/monitors/evaluate": {
-            "post": {
-                "summary": "Evaluate Spend-Controlled Market Monitor",
-                "description": "Return immediate rule matches and spend-control metadata for a bounded market monitor evaluation.",
-                "operationId": "evaluateMarketMonitor",
-                "responses": {
-                    "200": {
-                        "description": "Spend-controlled market monitor response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$0.25",
-                    "starterCredits": 10
-                }
-            }
-        },
-        "/v1/indicators/token-quality": {
-            "post": {
-                "summary": "Create Token Market Quality Indicator",
-                "description": "Return a transparent trader-grade token quality score from live VWAP, bid/ask, optional state_pool price, and closing-price window data where available.",
-                "operationId": "createTokenMarketQualityIndicator",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["symbol"],
-                                "properties": {
-                                    "symbol": {"type": "string", "example": "BTC-USD"}
-                                }
-                            },
-                            "example": {"symbol": "BTC-USD"}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Token market quality indicator response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$0.50",
-                    "starterCredits": 15
-                }
-            }
-        },
-        "/v1/indicators/state-divergence": {
-            "post": {
-                "summary": "Create Oracle / State Price Divergence Indicator",
-                "description": "Compare live market VWAP and bid/ask mid against Blocksize state_pool price for symbols with state_instruments pool coverage.",
-                "operationId": "createStateDivergenceIndicator",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "required": ["symbol"],
-                                "properties": {
-                                    "symbol": {"type": "string", "example": "MSOLUSD"}
-                                }
-                            },
-                            "example": {"symbol": "MSOLUSD"}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "State divergence indicator response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$0.50",
-                    "starterCredits": 15
-                }
-            }
-        },
-        "/v1/signals/solana-token-brief": {
-            "post": {
-                "summary": "Create Solana Token Brief",
-                "description": "Return a Solana-oriented token watchlist brief for supported symbols with explicit coverage misses for unsupported protocol, DEX, oracle, or pool feeds.",
-                "operationId": "createSolanaTokenBrief",
-                "responses": {
-                    "200": {
-                        "description": "Solana token brief response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$1.00",
-                    "starterCredits": 25
-                }
-            }
-        },
-        "/v1/signals/trader-alpha-pack": {
-            "post": {
-                "summary": "Create Trader Alpha Signal Pack",
-                "description": "Return a bounded trader decision-support bundle with token quality rankings, optional state divergence, spread quality, closing-price drift, and provenance.",
-                "operationId": "createTraderAlphaPack",
-                "responses": {
-                    "200": {
-                        "description": "Trader alpha signal pack response."
-                    },
-                    "402": {
-                        "description": "Payment Required."
-                    }
-                },
-                "x-payment-info": {
-                    "protocols": [
-                        "x402"
-                    ],
-                    "pricingMode": "fixed",
-                    "price": "$2.50",
-                    "starterCredits": 50
-                }
-            }
+          "price": "$0.10"
         }
+      }
+    },
+    "/v1/receipts/price": {
+      "post": {
+        "summary": "Audit Grade Price Receipt",
+        "description": "Create an audit-grade receipt for one price lookup. Cost: 10 credits or $0.25 USDC.",
+        "operationId": "audit_grade_price_receipt_v1_receipts_price_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbol": "BTCUSD",
+                "service": "vwap"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Audit Grade Price Receipt V1 Receipts Price Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$0.25"
+        }
+      }
+    },
+    "/v1/snapshots/macro": {
+      "post": {
+        "summary": "Multi Asset Macro Snapshot",
+        "description": "Create a bounded multi-asset macro snapshot. Cost: 25 credits or $1.00 USDC.",
+        "operationId": "multi_asset_macro_snapshot_v1_snapshots_macro_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "universe": [
+                  "BTCUSD"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Multi Asset Macro Snapshot V1 Snapshots Macro Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$1.00"
+        }
+      }
+    },
+    "/v1/monitors/evaluate": {
+      "post": {
+        "summary": "Spend Controlled Market Monitor",
+        "description": "Evaluate a bounded market monitor immediately. Cost: 10 credits or $0.25 USDC.",
+        "operationId": "spend_controlled_market_monitor_v1_monitors_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbols": [
+                  "BTCUSD"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Spend Controlled Market Monitor V1 Monitors Evaluate Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$0.25"
+        }
+      }
+    },
+    "/v1/indicators/token-quality": {
+      "post": {
+        "summary": "Token Market Quality Indicator",
+        "description": "Score one token using live price, bid/ask, state, and VWAP-window feeds.",
+        "operationId": "token_market_quality_indicator_v1_indicators_token_quality_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbol": "BTCUSD"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Token Market Quality Indicator V1 Indicators Token Quality Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$0.50"
+        }
+      }
+    },
+    "/v1/indicators/state-divergence": {
+      "post": {
+        "summary": "State Divergence Indicator",
+        "description": "Compare Blocksize market prices with state/reference prices.",
+        "operationId": "state_divergence_indicator_v1_indicators_state_divergence_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbol": "MSOLUSD"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response State Divergence Indicator V1 Indicators State Divergence Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$0.50"
+        }
+      }
+    },
+    "/v1/signals/solana-token-brief": {
+      "post": {
+        "summary": "Solana Token Brief",
+        "description": "Build a Solana-oriented token signal brief for supported price symbols.",
+        "operationId": "solana_token_brief_v1_signals_solana_token_brief_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbols": [
+                  "SOLUSD"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Solana Token Brief V1 Signals Solana Token Brief Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$1.00"
+        }
+      }
+    },
+    "/v1/signals/trader-alpha-pack": {
+      "post": {
+        "summary": "Trader Alpha Pack",
+        "description": "Bundle token quality indicators and macro context into a trader signal pack.",
+        "operationId": "trader_alpha_pack_v1_signals_trader_alpha_pack_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "symbols": [
+                  "BTCUSD"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Trader Alpha Pack V1 Signals Trader Alpha Pack Post"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required. Returns a PAYMENT-REQUIRED header with an x402 PaymentRequired challenge.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64 encoded x402 PaymentRequired object.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-payment-info": {
+          "protocols": [
+            "x402"
+          ],
+          "pricingMode": "fixed",
+          "price": "$2.50"
+        }
+      }
+    },
+    "/v1/search": {
+      "get": {
+        "summary": "Search Pairs",
+        "description": "Search instruments. FREE.",
+        "operationId": "search_pairs_v1_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "Search query",
+              "title": "Q",
+              "example": "BTC"
+            },
+            "description": "Search query",
+            "example": "BTC"
+          },
+          {
+            "name": "asset_class",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(all|crypto|equity|equities|fx|metal)$",
+              "description": "Asset class filter",
+              "default": "all",
+              "title": "Asset Class"
+            },
+            "description": "Asset class filter"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "description": "Maximum matching instruments to return",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Maximum matching instruments to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Zero-based offset into the deterministic search results",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "Zero-based offset into the deterministic search results"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Search Pairs V1 Search Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/instruments/{service}": {
+      "get": {
+        "summary": "List Instruments",
+        "description": "List instruments for a service. FREE.",
+        "operationId": "list_instruments_v1_instruments__service__get",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Service",
+              "example": "vwap"
+            },
+            "example": "vwap"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "description": "Maximum instruments to return",
+              "default": 100,
+              "title": "Limit"
+            },
+            "description": "Maximum instruments to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Zero-based offset into the sorted instrument catalog",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "Zero-based offset into the sorted instrument catalog"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response List Instruments V1 Instruments  Service  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/products": {
+      "get": {
+        "summary": "Get Products",
+        "description": "Serve raw data and premium workflow product catalog. FREE.",
+        "operationId": "get_products_v1_products_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Get Products V1 Products Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities/check": {
+      "post": {
+        "summary": "Check Data Capabilities",
+        "description": "Check whether the current key has enough feed coverage for a product.\n\nThis is a free readiness check. It uses instrument catalogs and known method\navailability, not paid price snapshots.",
+        "operationId": "check_data_capabilities_v1_capabilities_check_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              },
+              "example": {
+                "product": "token_market_quality_indicator",
+                "symbols": [
+                  "BTCUSD"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Check Data Capabilities V1 Capabilities Check Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coverage": {
+      "get": {
+        "summary": "Unified Coverage",
+        "description": "Return one conservative coverage map for humans and agents. FREE.",
+        "operationId": "unified_coverage_v1_coverage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Unified Coverage V1 Coverage Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cache/status": {
+      "get": {
+        "summary": "Get Cache Status",
+        "description": "Report stream-cache readiness for websocket-backed feeds. FREE.",
+        "operationId": "get_cache_status_v1_cache_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Get Cache Status V1 Cache Status Get"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
 }
