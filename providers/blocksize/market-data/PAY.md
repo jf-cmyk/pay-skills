@@ -11,7 +11,8 @@ openapi:
 
 Blocksize Market Data provides free discovery and accountless x402-paid HTTP
 access. The adjacent OpenAPI snapshot contains 17 paid operations and six free
-discovery/readiness operations, aligned with production v0.6.16.
+discovery/readiness operations. Request contracts were checked against production
+v0.6.21; each live 402 challenge remains authoritative for payment terms.
 
 Use `/v1/search?q=BTC` or `/v1/instruments/{service}` to find supported identifiers.
 Both accept `limit` and `offset`; a page of results is not the full catalog.
@@ -30,7 +31,14 @@ For an explicitly requested multi-symbol lookup, `/v1/batch` accepts a `reqs`
 query such as `vwap:BTCUSD,bidask:ETHUSD`. Nine POST operations provide market
 briefs, pre-trade checks, price receipts, macro snapshots, one-shot monitor
 evaluations, token-quality/state-divergence indicators, and signal bundles.
-The sidecar includes bounded example request bodies for each.
+The sidecar includes typed request schemas and example bodies for each. These
+are intentionally strict canonical client contracts: provide explicit uppercase
+symbols from discovery, not legacy aliases or implicit default watchlists.
+Market briefs and monitor evaluations accept 1–8 symbols; macro snapshots and
+trader signal packs accept 1–12; Solana token briefs accept 1–10. Single-symbol
+workflows require `symbol`. Free capability checks accept 1–25 symbols.
+Numeric thresholds must be positive; monitor rules specify `metric`, `operator`,
+and numeric `value`. Validate the body locally before authorizing a payment.
 
 Preserve the timestamps, provider context, methodology, and quality/error flags
 returned by the selected product. A price receipt is a provenance record, not a
@@ -62,3 +70,5 @@ production-promoted, and catalog inclusion alone is not a live-delivery guarante
 - Do not send wallet private keys or seed phrases to this API.
 - Avoid polling unless the user has explicitly approved repeated paid calls.
 - A monitor evaluation is a single request, not a subscription or background job.
+- The optional monitor `max_credits` field is reporting metadata, not a
+  server-enforced spending cap. Authorize the actual x402 cost separately.
