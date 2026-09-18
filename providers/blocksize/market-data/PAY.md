@@ -37,8 +37,11 @@ symbols from discovery, not legacy aliases or implicit default watchlists.
 Market briefs and monitor evaluations accept 1–8 symbols; macro snapshots and
 trader signal packs accept 1–12; Solana token briefs accept 1–10. Single-symbol
 workflows require `symbol`. Free capability checks accept 1–25 symbols.
-Numeric thresholds must be positive; monitor rules specify `metric`, `operator`,
-and numeric `value`. Validate the body locally before authorizing a payment.
+Optional price/notional values and spread/divergence/age limits must be positive.
+Monitor rules specify `metric`, `operator`, and a numeric comparison `value`;
+zero and negative comparison values are supported (for example, `spread_bps < 0`
+can detect a crossed quote). They are not the positive limit fields above.
+Validate the body locally before authorizing a payment.
 
 Preserve the timestamps, provider context, methodology, and quality/error flags
 returned by the selected product. A price receipt is a provenance record, not a

@@ -1040,7 +1040,7 @@
                         },
                       "value": {
                         "type": "number",
-                        "description": "Threshold in the selected metric's units: price units for value, milliseconds for freshness_ms, or basis points for spread_bps.",
+                        "description": "Numeric comparison value in the selected metric's units: price units for value, milliseconds for freshness_ms, or basis points for spread_bps. Zero and negative values are supported; for example, spread_bps < 0 detects crossed quotes. This is not a positive spread/age limit field.",
                         "examples": [50]
                         }
                       }
