@@ -1038,8 +1038,10 @@
                             "<="
                           ]
                         },
-                        "value": {
-                          "type": "number"
+                      "value": {
+                        "type": "number",
+                        "description": "Threshold in the selected metric's units: price units for value, milliseconds for freshness_ms, or basis points for spread_bps.",
+                        "examples": [50]
                         }
                       }
                     }
