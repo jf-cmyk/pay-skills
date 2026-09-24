@@ -53,8 +53,12 @@ production-promoted, and catalog inclusion alone is not a live-delivery guarante
 - Direct HTTP returns x402 v2 payment requirements for USDC on Solana mainnet
   and Base mainnet. This Pay.sh entry is validated for Solana; Base support in the
   API does not imply support in every Pay.sh client.
-- Eligible starter credits belong to authenticated connector identities only.
-  Anonymous Pay.sh HTTP requests cannot claim or spend connector credits.
+- Authenticated connector users (Claude, Cursor, OpenAI) with a verified email
+  receive 15,000 free live-data credits every calendar month under an
+  evaluation licence with required "Data by Blocksize" attribution; paid
+  subscription plans start at EUR 49/month. Anonymous Pay.sh HTTP requests cannot
+  claim or spend connector credits; these routes use direct x402 only, at
+  unchanged per-call prices.
 - Free public MCP discovery: https://mcp.blocksize.info/mcp/server/
 - API/AI catalogs: https://mcp.blocksize.info/.well-known/api-catalog and
   https://mcp.blocksize.info/.well-known/ai-catalog.json
