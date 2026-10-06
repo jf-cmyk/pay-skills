@@ -1,7 +1,7 @@
 ---
 name: market-data
 title: "Blocksize Market Data"
-description: "Crypto, supported equity, FX, and metals observations, VWAP windows, market briefs, and provenance receipts through x402-paid HTTP, with free instrument discovery and readiness checks."
+description: "Crypto, tokenized equity, FX, and metals observations, VWAP windows, market briefs, and provenance receipts through x402-paid HTTP, with free instrument discovery and readiness checks."
 use_case: "Use for market-price lookups, bid/ask comparisons, multi-asset snapshots, and read-only pre-trade checks. Resolve symbols and product readiness first, then request only the observations the user needs."
 category: finance
 service_url: https://mcp.blocksize.info
@@ -12,7 +12,7 @@ openapi:
 Blocksize Market Data provides free discovery and accountless x402-paid HTTP
 access. The adjacent OpenAPI snapshot contains 17 paid operations and six free
 discovery/readiness operations. Request contracts were checked against production
-v0.6.21; each live 402 challenge remains authoritative for payment terms.
+v0.6.23; each live 402 challenge remains authoritative for payment terms.
 
 Use `/v1/search?q=BTC` or `/v1/instruments/{service}` to find supported identifiers.
 Both accept `limit` and `offset`; a page of results is not the full catalog.
@@ -53,12 +53,14 @@ production-promoted, and catalog inclusion alone is not a live-delivery guarante
 - Direct HTTP returns x402 v2 payment requirements for USDC on Solana mainnet
   and Base mainnet. This Pay.sh entry is validated for Solana; Base support in the
   API does not imply support in every Pay.sh client.
-- Authenticated connector users (Claude, Cursor, OpenAI) with a verified email
-  receive 15,000 free live-data credits every calendar month under an
+- Authenticated connector users (Claude, ChatGPT, Cursor) with a verified email
+  receive 30,000 free live-data credits every calendar month under an
   evaluation licence with required "Data by Blocksize" attribution; paid
-  subscription plans start at EUR 49/month. Anonymous Pay.sh HTTP requests cannot
-  claim or spend connector credits; these routes use direct x402 only, at
-  unchanged per-call prices.
+  subscription plans start at EUR 49/month. One price list applies everywhere:
+  1 credit = $0.001 USDC, so a route costs the same in connector credits as it
+  does in USDC over x402 (core crypto 2, long-tail crypto 4, FX and metals 5,
+  tokenized equities 8, workflows 100 to 2,500). Anonymous Pay.sh HTTP requests
+  cannot claim or spend connector credits; these routes use direct x402 only.
 - Free public MCP discovery: https://mcp.blocksize.info/mcp/server/
 - API/AI catalogs: https://mcp.blocksize.info/.well-known/api-catalog and
   https://mcp.blocksize.info/.well-known/ai-catalog.json
